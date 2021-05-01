@@ -24,6 +24,8 @@ RWRIST = [ 813., 585., 0. ]
 POSITIONS = [ HIP, RHIP, RKNEE, RFOOT, LHIP, LKNEE, LFOOT, THORAX, LSHLDR, LELBOW, LWRIST, RSHLDR, RELBOW, RWRIST ]
 
 EDGES = [[0, 1], [0, 4], [0, 7], [1, 2], [2, 3], [4, 5], [5, 6], [7, 8], [8, 9], [9, 10], [7, 11], [11, 12], [12, 13]]
+LEFTS = [4, 5, 6, 8, 9, 10]
+RIGHTS = [1, 2, 3, 11, 12, 13]
 
 class Joint(object):
 
@@ -64,40 +66,12 @@ class Skeleton(object):
     def make_skeleton(self):
 
         for i in range(len(self._names)):
-
             self._base.append(Joint(POSITIONS[i], self._names[i]))
-
-        """
-        self._base.append(Joint(HIP, "hip"))
-        self._base.append(Joint(RHIP, "rhip"))
-        self._base.append(Joint(RKNEE, "rknee"))
-        self._base.append(Joint(RFOOT, "rfoot"))
-        self._base.append(Joint(LHIP, "lhip"))
-        self._base.append(Joint(LKNEE, "lknee"))
-        self._base.append(Joint(LFOOT, "lfoot"))
-        self._base.append(Joint(THORAX, "thorax"))
-        self._base.append(Joint(LSHLDR, "lshldr"))
-        self._base.append(Joint(LELBOW, "lelbow"))
-        self._base.append(Joint(LWRIST, "lwrist"))
-        self._base.append(Joint(RWRIST, "rwrist"))
-        self._base.append(Joint(RELBOW, "relbow"))
-        self._base.append(Joint(RSHLDR, "rshldr"))
-        """
 
         for u, v in EDGES:
             self._base[u].add_child(self._base[v])
             self._base[v].set_parent(self._base[u])
             self._bone_names.append(f"{self._names[u]}_{self._names[v]}")
-
-        """
-        for joint in self._base:
-
-            print(f"{joint.name} => ", end="")
-            for child in joint.children:
-                print(f"{child}, ", end="")
-
-            print("\r")
-        """
 
     def update_pose(self, joints):
 
@@ -146,6 +120,10 @@ class Skeleton(object):
         self.update_pose(joints)
 
         self._positions = joints
+
+    def get_pose(self):
+
+        return self._positions
 
     def visualize(self):
 

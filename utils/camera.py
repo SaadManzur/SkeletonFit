@@ -91,7 +91,8 @@ def load_cameras( bpath='cameras.h5', subjects=[1,5,6,7,8,9,11] ):
     with h5py.File(bpath,'r') as hf:
         for s in subjects:
             for c in range(4): # There are 4 cameras in human3.6m
-                rcams[(s, c+1)] = load_camera_params(hf, 'subject%d/camera%d/{0}' % (s,c+1) )
+                data = load_camera_params(hf, 'subject%d/camera%d/{0}' % (s,c+1) )
+                rcams[(s, int(data[6]))] = data
 
     return rcams
 
