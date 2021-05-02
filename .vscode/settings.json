@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/home/saad/anaconda3/envs/py36_tfgpu/bin/python"
+    "python.pythonPath": "/home/saad/anaconda3/envs/py36_tfgpu/bin/python",
+    "python.formatting.provider": "black"
 }

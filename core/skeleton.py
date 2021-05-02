@@ -133,7 +133,7 @@ class Skeleton(object):
         pose = np.array(self._positions)/1000
         pose -= pose[0, :]
 
-        draw_skeleton(pose, ax, True)
+        draw_skeleton(pose, ax, True, True)
 
         ax.set_xlim((-2, 2))
         ax.set_ylim((-2, 2))

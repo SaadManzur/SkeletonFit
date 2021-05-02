@@ -1,10 +1,12 @@
 import numpy as np
 
+from utils.region import find_cube_from_vector
+
 edges = [[0, 1], [0, 4], [0, 7], [1, 2], [2, 3], [4, 5], [5, 6], [7, 8], [8, 9], [9, 10], [7, 11], [11, 12], [12, 13]]
 lefts = [4, 5, 6, 8, 9, 10]
 rights = [1, 2, 3, 11, 12, 13]
 
-def draw_skeleton(pose, ax, is_3d=False):
+def draw_skeleton(pose, ax, is_3d=False, draw_cube=False):
 
     col_right = 'b'
     col_left = 'r'
@@ -15,17 +17,33 @@ def draw_skeleton(pose, ax, is_3d=False):
         ax.scatter(pose[:, 0], pose[:, 1], color='k')
 
     for u, v in edges:
+        is_limb = False
+
         col_to_use = 'k'
 
         if u in lefts and v in lefts:
             col_to_use = col_left
+            is_limb = True
+
         elif u in rights and v in rights:
             col_to_use = col_right
+            is_limb = True
 
         if is_3d:
             ax.plot([pose[u, 0], pose[v, 0]], [pose[u, 1], pose[v, 1]], zs=[pose[u, 2], pose[v, 2]], color=col_to_use)
         else:
             ax.plot([pose[u, 0], pose[v, 0]], [pose[u, 1], pose[v, 1]], color=col_to_use)
+
+        if is_limb and draw_cube and is_3d:
+
+            pts, pt_edges = find_cube_from_vector(pose[u, :], pose[v, :], 0.1)
+            pts = np.array(pts)
+
+            ax.scatter(pts[:, 0], pts[:, 1], zs=pts[:, 2], color='y')
+
+            for (pt_u, pt_v) in pt_edges:
+                ax.plot([pts[pt_u, 0], pts[pt_v, 0]], [pts[pt_u, 1], pts[pt_v, 1]], zs=[pts[pt_u, 2], pts[pt_v, 2]], color='y')
+
 
 def correct_pose(pose, lower_hip, hip_len_mm=None):
 
